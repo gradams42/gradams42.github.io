@@ -6,7 +6,7 @@ Former Embedded Systems Security Analyst @ CESR Labs | Previous IT Security Inte
 I enjoy doing hardware security in my freetime, and have experience in embedded systems security, AI developement, and currently pushing the possibilities on satellite security within academia. I have a bachelors graduate date in December of 2025, and a masters graduation date of December 2026. 
 
 ## Resume
-- [Download Resume](Adams_Gabriel_Resume.pdf))
+- [Download Resume](Adams_Gabriel_Resume.pdf)
 
 ## Documents
 - [Project Report](documents/project-report.pdf)
