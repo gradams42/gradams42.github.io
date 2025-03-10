@@ -1,3 +1,4 @@
-theme: jekyll-theme-minimal
-title: My Resume
-description: Welcome to my personal resume site
+theme: jekyll-theme-cayman
+title: "Gabriel Adams Public Website"
+description: "This is my professional portfolio as well as where I can allow for easy access to my professional documentation."
+show_downloads: true  # Optional: Show a download button for repository ZIP
