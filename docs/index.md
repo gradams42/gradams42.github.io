@@ -9,7 +9,7 @@ I enjoy doing hardware security in my freetime, and have experience in embedded 
 - [Download Resume](Adams_Gabriel_Resume.pdf)
 - 
 ## Certifications
-- [Security+](CompTIA Security+ ce certificate.pdf)
+- [Security+](CompTIA_Security+_ce_certificate.pdf)
 - 
 ## Documents for ERAU-NASA-NSF AeroCyber Workshop
 - [Letter of support](PUT-What-Ismail_gives-you.pdf)
