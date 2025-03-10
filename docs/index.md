@@ -7,9 +7,15 @@ I enjoy doing hardware security in my freetime, and have experience in embedded 
 
 ## Resume
 - [Download Resume](Adams_Gabriel_Resume.pdf)
-
-## Documents
-- [Project Report](documents/project-report.pdf)
+- 
+## Certifications
+- [Security+](CompTIA Security+ ce certificate.pdf)
+- 
+## Documents for ERAU-NASA-NSF AeroCyber Workshop
+- [Letter of support](PUT-What-Ismail_gives-you.pdf)
+- [Applicant Statement](Statement.pdf)
+  
+## Certifications
 - [Certificate](documents/certificate.pdf)
 
 ## Contact
