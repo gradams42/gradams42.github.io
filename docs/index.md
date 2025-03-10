@@ -15,8 +15,6 @@ I enjoy doing hardware security in my freetime, and have experience in embedded 
 - [Letter of support](PUT-What-Ismail_gives-you.pdf)
 - [Applicant Statement](Statement.pdf)
   
-## Certifications
-- [Certificate](documents/certificate.pdf)
 
 ## Contact
 - **Email:** [gradams42@tntech.edu](mailto:gradams42@tntech.edu)
