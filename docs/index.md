@@ -1,4 +1,4 @@
-# Welcome to My Resume Page
+# Gabriel Adams Professional Portfolio
 
 ## About Me
 Former Embedded Systems Security Analyst @ CESR Labs | Previous IT Security Intern @ Rebo Electronics | Current Satellite Security Researcher @ CEROC | Incoming Vulnerability Research Internship @ Oak Ridge National Lab | Security+ | SFS Scholar
