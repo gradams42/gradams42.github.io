@@ -1,5 +1,11 @@
 # Gabriel Adams Professional Portfolio
 
+## Documents for ERAU-NASA-NSF AeroCyber Workshop
+- [Download All Documents](https://github.com/gradams42/gradams42.github.io/raw/refs/heads/main/docs/Download_All_ERAU.zip)
+- [Applicant Statement](Statement.pdf)
+- [Advisor Letter of Support](CEROC_Letterhead_Reference_Gabriel.pdf)
+- [Resume](Adams_Gabriel_Resume.pdf)
+  
 ## About Me
 Former Embedded Systems Security Analyst @ CESR Labs | Previous IT Security Intern @ Rebo Electronics | Current Satellite Security Researcher @ CEROC | Incoming Vulnerability Research Internship @ Oak Ridge National Lab | Security+ | SFS Scholar
 
@@ -11,11 +17,6 @@ I enjoy doing hardware security in my freetime, and have experience in embedded 
 ## Certifications
 - [Security+](CompTIA_Security+_ce_certificate.pdf)
 
-## Documents for ERAU-NASA-NSF AeroCyber Workshop
-- [Download All Documents](https://github.com/gradams42/gradams42.github.io/raw/refs/heads/main/docs/Download_All_ERAU.zip)
-- [Applicant Statement](Statement.pdf)
-- [Advisor Letter of Support](CEROC_Letterhead_Reference_Gabriel.pdf)
-- [Resume](Adams_Gabriel_Resume.pdf)
   
 ## Contact
 - **Email:** [gradams42@tntech.edu](mailto:gradams42@tntech.edu)
