@@ -14,8 +14,8 @@ I enjoy doing hardware security in my freetime, and have experience in embedded 
 ## Documents for ERAU-NASA-NSF AeroCyber Workshop
 - [Letter of support](PUT-What-Ismail_gives-you.pdf)
 - [Applicant Statement](Statement.pdf)
+- [Advisor Letter of Support](CEROC_Letterhead_Reference_Gabriel.pdf)
   
-
 ## Contact
 - **Email:** [gradams42@tntech.edu](mailto:gradams42@tntech.edu)
 - **GitHub:** [github.com/gradams42](https://github.com/gradams42)
