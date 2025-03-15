@@ -14,6 +14,7 @@ I enjoy doing hardware security in my freetime, and have experience in embedded 
 ## Documents for ERAU-NASA-NSF AeroCyber Workshop
 - [Applicant Statement](Statement.pdf)
 - [Advisor Letter of Support](CEROC_Letterhead_Reference_Gabriel.pdf)
+- [Resume](Adams_Gabriel_Resume.pdf)
   
 ## Contact
 - **Email:** [gradams42@tntech.edu](mailto:gradams42@tntech.edu)
