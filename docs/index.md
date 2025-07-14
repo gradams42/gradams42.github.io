@@ -5,8 +5,8 @@ I'm a cybersecurity researcher with a focus on embedded systems, hardware securi
 
 - Former Embedded Systems Security Analyst at CESR Labs  
 - Previous IT Security Intern at Rebo Electronics  
-- Current Satellite Security Researcher at CEROC  
-- Ongoing Vulnerability Research Intern at Oak Ridge National Laboratory  
+- Ongoing Satellite Security Researcher at CEROC  
+- Current Vulnerability Research Intern at Oak Ridge National Laboratory  
 
 I hold CompTIA Security+ and CySA+ certifications and am proud to be an SFS (Scholarship for Service) Scholar.  
 My academic timeline includes a B.S. in Computer Engineering (expected December 2025) and an M.S. in Cybersecurity (expected December 2026).
