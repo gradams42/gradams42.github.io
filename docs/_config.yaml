@@ -1,4 +1,4 @@
-theme: jekyll-theme-cayman
-title: "Gabriel Adams Public Website"
-description: "This is my professional portfolio as well as where I can allow for easy access to my professional documentation."
+theme: jekyll-theme-hacker
+title: Gabriel Adams – Cybersecurity Portfolio
+description: Researcher in Embedded Systems and Satellite Security | SFS Scholar
 show_downloads: true  # Optional: Show a download button for repository ZIP
