@@ -1,18 +1,26 @@
-# Gabriel Adams Professional Portfolio
+# Gabriel Adams – Professional Portfolio
 
 ## About Me
-Former Embedded Systems Security Analyst @ CESR Labs | Previous IT Security Intern @ Rebo Electronics | Ongoing Satellite Security Researcher @ CEROC | Current Vulnerability Research Internship @ Oak Ridge National Lab | Security+ | CySA+ | SFS Scholar
+I'm a cybersecurity researcher with a focus on embedded systems, hardware security, and satellite communication protocols. My experience includes:
 
-I enjoy doing hardware security in my freetime, and have experience in embedded systems security, AI developement, and currently pushing the possibilities on satellite security within academia. I have a bachelors graduate date in December of 2025, and a masters graduation date of December 2026. 
+- Former Embedded Systems Security Analyst at CESR Labs  
+- Previous IT Security Intern at Rebo Electronics  
+- Current Satellite Security Researcher at CEROC  
+- Ongoing Vulnerability Research Intern at Oak Ridge National Laboratory  
+
+I hold CompTIA Security+ and CySA+ certifications and am proud to be an SFS (Scholarship for Service) Scholar.  
+My academic timeline includes a B.S. in Computer Engineering (expected December 2025) and an M.S. in Cybersecurity (expected December 2026).
+
+Outside of work, I enjoy exploring hardware security challenges and pushing the boundaries of satellite system protection within academia.
 
 ## Resume
-- [Download Resume](Adams_Gabriel_Resume.pdf)
+- [Download My Resume](Adams_Gabriel_Resume.pdf)
 
 ## Certifications
-- [Security+](CompTIA_Security+_ce_certificate.pdf)
-- [CySA+](CompTIA_CySA+_ce_certificate.pdf)
-  
+- [CompTIA Security+](CompTIA_Security+_ce_certificate.pdf)  
+- [CompTIA CySA+](CompTIA_CySA+_ce_certificate.pdf)
+
 ## Contact
-- **Email:** [gradams42@tntech.edu](mailto:gradams42@tntech.edu)
-- **GitHub:** [github.com/gradams42](https://github.com/gradams42)
-- **LinkedIn:** [linkedin.com/in/gabriel-adams-749815260/](https://www.linkedin.com/in/gabriel-adams-749815260/)
+- **Email:** [gradams42@tntech.edu](mailto:gradams42@tntech.edu)  
+- **GitHub:** [github.com/gradams42](https://github.com/gradams42)  
+- **LinkedIn:** [linkedin.com/in/gabriel-adams-749815260](https://www.linkedin.com/in/gabriel-adams-749815260)
