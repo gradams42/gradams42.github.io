@@ -20,6 +20,10 @@ Outside of work, I enjoy exploring hardware security challenges and pushing the 
 - [CompTIA Security+](CompTIA_Security+_ce_certificate.pdf)  
 - [CompTIA CySA+](CompTIA_CySA+_ce_certificate.pdf)
 
+## Project Writeups
+- [GHome Smart Plug](GHomeSmartPlugWriteup.pdf)  
+
+
 ## Contact
 - **Email:** [gradams42@tntech.edu](mailto:gradams42@tntech.edu)  
 - **GitHub:** [github.com/gradams42](https://github.com/gradams42)  
