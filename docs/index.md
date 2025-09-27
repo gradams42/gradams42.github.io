@@ -21,7 +21,8 @@ Outside of work, I enjoy exploring hardware security challenges and pushing the 
 - [CompTIA CySA+](CompTIA_CySA+_ce_certificate.pdf)
 
 ## Project Writeups
-- [GHome Smart Plug](GHomeSmartPlugWriteup.pdf)  
+- [GHome Smart Plug](GHomeSmartPlugWriteup.pdf)
+- [Malvertizer Writeup](MalvertizerWriteup.pdf)
 
 
 ## Contact
