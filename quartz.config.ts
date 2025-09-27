@@ -2,21 +2,20 @@ import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
 
 /**
+ * Gabriel Adams – Professional Portfolio
  * Quartz 4 Configuration
- *
- * See https://quartz.jzhao.xyz/configuration for more information.
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Quartz 4",
-    pageTitleSuffix: "",
+    pageTitle: "Gabriel Adams – Portfolio",
+    pageTitleSuffix: " | Cybersecurity Researcher",
     enableSPA: true,
     enablePopovers: true,
     analytics: {
-      provider: "plausible",
+      provider: "plausible", // change to "google", "umami", etc. if you want another provider
     },
     locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
+    baseUrl: "gradams42.github.io", // use your GitHub Pages base URL
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
     theme: {
@@ -29,26 +28,26 @@ const config: QuartzConfig = {
       },
       colors: {
         lightMode: {
-          light: "#faf8f8",
-          lightgray: "#e5e5e5",
-          gray: "#b8b8b8",
-          darkgray: "#4e4e4e",
-          dark: "#2b2b2b",
-          secondary: "#284b63",
+          light: "#ffffff",
+          lightgray: "#f2f2f2",
+          gray: "#b0b0b0",
+          darkgray: "#3d3d3d",
+          dark: "#1a1a1a",
+          secondary: "#1f6feb",  // LinkedIn-style blue
           tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#fff23688",
+          highlight: "rgba(31, 111, 235, 0.15)",
+          textHighlight: "#ffeb3b88",
         },
         darkMode: {
-          light: "#161618",
-          lightgray: "#393639",
-          gray: "#646464",
-          darkgray: "#d4d4d4",
-          dark: "#ebebec",
-          secondary: "#7b97aa",
+          light: "#16181d",
+          lightgray: "#2d2f34",
+          gray: "#6e7681",
+          darkgray: "#d1d5da",
+          dark: "#f0f6fc",
+          secondary: "#58a6ff",  // softer blue in dark mode
           tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#b3aa0288",
+          highlight: "rgba(88, 166, 255, 0.15)",
+          textHighlight: "#ffeb3b66",
         },
       },
     },
@@ -88,8 +87,7 @@ const config: QuartzConfig = {
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      // Comment out CustomOgImages to speed up build time
-      Plugin.CustomOgImages(),
+      Plugin.CustomOgImages(), // generates clean OG images for links
     ],
   },
 }
