@@ -20,7 +20,7 @@ I investigated `https://gofirmware.com/downloads/pxie-8880-firmware` and determi
 - **Goal:** Determine what runs when someone clicks the download link and whether it led to malicious behavior.
     
 
-![[Pasted image 20250927004838.png]]
+![Malware Main Page](images/MalwareMainPage.png)
 
 ## 2 — Environment and safety posture
 
