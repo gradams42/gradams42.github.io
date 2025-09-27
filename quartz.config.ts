@@ -51,7 +51,7 @@ const config: QuartzConfig = {
         },
       },
     },
-    outputDir: "./docs", // ✅ Updated for GitHub Pages
+    outputDir: "./docs", // Quartz output for GitHub Pages
   },
   plugins: {
     transformers: [
@@ -88,7 +88,7 @@ const config: QuartzConfig = {
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      Plugin.CustomOgImages(),
+      // Plugin.CustomOgImages(), // disabled to prevent build error
     ],
   },
 }
