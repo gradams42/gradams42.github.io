@@ -51,7 +51,7 @@ const config: QuartzConfig = {
         },
       },
     },
-    outputDir: "./public", // <-- add this line
+    outputDir: "./docs", // ✅ Updated for GitHub Pages
   },
   plugins: {
     transformers: [
