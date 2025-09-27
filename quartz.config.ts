@@ -15,7 +15,7 @@ const config: QuartzConfig = {
       provider: "plausible", // change to "google", "umami", etc. if you want another provider
     },
     locale: "en-US",
-    baseUrl: "gradams42.github.io", // use your GitHub Pages base URL
+    baseUrl: "https://gradams42.github.io", // full URL for GitHub Pages
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
     theme: {
@@ -33,7 +33,7 @@ const config: QuartzConfig = {
           gray: "#b0b0b0",
           darkgray: "#3d3d3d",
           dark: "#1a1a1a",
-          secondary: "#1f6feb",  // LinkedIn-style blue
+          secondary: "#1f6feb",
           tertiary: "#84a59d",
           highlight: "rgba(31, 111, 235, 0.15)",
           textHighlight: "#ffeb3b88",
@@ -44,13 +44,14 @@ const config: QuartzConfig = {
           gray: "#6e7681",
           darkgray: "#d1d5da",
           dark: "#f0f6fc",
-          secondary: "#58a6ff",  // softer blue in dark mode
+          secondary: "#58a6ff",
           tertiary: "#84a59d",
           highlight: "rgba(88, 166, 255, 0.15)",
           textHighlight: "#ffeb3b66",
         },
       },
     },
+    outputDir: "./public", // <-- add this line
   },
   plugins: {
     transformers: [
@@ -87,7 +88,7 @@ const config: QuartzConfig = {
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      Plugin.CustomOgImages(), // generates clean OG images for links
+      Plugin.CustomOgImages(),
     ],
   },
 }
