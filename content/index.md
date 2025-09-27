@@ -5,10 +5,11 @@ title: Gabriel Adams – Professional Portfolio
 # About Me
 I'm a cybersecurity researcher with a focus on embedded systems, hardware security, and satellite communication protocols. My experience includes:
 
-- Former Embedded Systems Security Analyst at CESR Labs  
-- Previous IT Security Intern at Rebo Electronics  
-- Ongoing Satellite Security Researcher at CEROC  
-- Current Vulnerability Research Intern at Oak Ridge National Laboratory  
+- Vulnerability Research Intern at Oak Ridge National Laboratory 
+- Embedded Systems Security Analyst at CESR Labs  
+- IT Security Intern at Rebo Electronics  
+- Satellite Security Researcher at CEROC  
+
 
 I hold **CompTIA Security+** and **CompTIA CySA+** certifications and am proud to be a **Scholarship for Service (SFS) Scholar**.  
 
